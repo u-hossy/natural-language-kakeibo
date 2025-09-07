@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Label } from "./components/ui/label";
@@ -6,7 +6,7 @@ import { Switch } from "./components/ui/switch";
 import { Textarea } from "./components/ui/textarea";
 import type { Input } from "./types";
 import { tokenize } from "./lib/tokenize";
-import { calculateTotal } from "./lib/calculate";
+import { calculateTotal, isTokenIncludedInCalculation } from "./lib/calculate";
 
 function App() {
   const [userInput, setUserInput] = useState<string>("");
@@ -18,13 +18,20 @@ function App() {
   const handleClear = () =>
     window.confirm("入力された内容がクリアされます。よろしいですか？") &&
     setUserInput("");
+
   const handleCalculate = () => {
     const t = tokenize(userInput);
     setFilterInput(t);
-    // console.log(userInput);
-    // console.log(t);
-    // console.log(filterInput);
   };
+
+  useEffect(() => {
+    if (userInput.trim() !== "") {
+      const t = tokenize(userInput);
+      setFilterInput(t);
+    } else {
+      setFilterInput([]);
+    }
+  }, [userInput]);
 
   return (
     <>
@@ -42,6 +49,7 @@ function App() {
           placeholder="ここに内容を貼り付けてください。（例：¥2,000 映画代）"
           onChange={(e) => {
             setUserInput(e.target.value);
+            handleCalculate();
           }}
           value={userInput}
         />
@@ -69,55 +77,57 @@ function App() {
           </div>
         </div>
 
-        <div className="m-4 flex flex-row gap-4">
-          <Button className="w-20" variant="outline" onClick={handleClear}>
-            クリア
-          </Button>
-          <Button className="w-20" onClick={handleCalculate}>
-            計算
-          </Button>
-        </div>
+        <div className="w-full max-w-3xl">
+          <Label className="mb-2 font-semibold">解析結果:</Label>
+          <div className="mb-4 min-h-12 rounded-md border bg-gray-50 p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+            {filterInput.map((token, index) => {
+              if (token.contentType === "LF") {
+                return "\n";
+              }
 
-        {/* トークン結果表示エリア */}
-        {filterInput.length > 0 && (
-          <div className="w-full max-w-3xl">
-            <Label className="mb-2 font-semibold">解析結果:</Label>
-            <div className="mb-4 rounded-md border bg-gray-50 p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap">
-              {filterInput.map((token, index) => {
-                if (token.contentType === "LF") {
-                  return "\n";
-                }
-
-                return (
-                  <span
-                    key={index}
-                    className={`${
-                      token.contentType === "number"
-                        ? "bg-green-200 text-green-800"
-                        : token.contentType === "space"
-                          ? ""
-                          : "bg-red-200 text-red-800"
-                    }`}
-                  >
-                    {token.content}
-                  </span>
-                );
-              })}
-            </div>
-
-            {/* 合計値表示 */}
-            <div className="rounded-md border bg-blue-50 p-4">
-              <Label className="text-lg font-semibold">
-                合計: ¥
-                {calculateTotal(
+              let className = "";
+              if (token.contentType === "number") {
+                const isIncluded = isTokenIncludedInCalculation(
+                  token,
+                  index,
+                  filterInput,
                   onlyAfterYenMark,
                   onlyBeforeYen,
-                  filterInput,
-                ).toLocaleString()}
-              </Label>
-            </div>
+                );
+                className = isIncluded
+                  ? "bg-green-200 text-green-800" // 計算対象
+                  : "bg-gray-200 text-gray-600"; // 計算対象外
+              } else if (token.contentType === "space") {
+                className = "";
+              } else {
+                className = "bg-red-200 text-red-800";
+              }
+
+              return (
+                <span key={index} className={className}>
+                  {token.content}
+                </span>
+              );
+            })}
           </div>
-        )}
+
+          {/* 合計値表示 */}
+          <div className="rounded-md border bg-blue-50 p-4">
+            <Label className="text-lg font-semibold">
+              合計: ¥
+              {calculateTotal(
+                onlyAfterYenMark,
+                onlyBeforeYen,
+                filterInput,
+              ).toLocaleString()}
+            </Label>
+          </div>
+        </div>
+        <div className="m-8 flex flex-row gap-4">
+          <Button variant="outline" onClick={handleClear}>
+            入力内容をクリア
+          </Button>
+        </div>
       </div>
     </>
   );

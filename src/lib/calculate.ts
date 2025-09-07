@@ -43,6 +43,30 @@ function filterTokens(
   }
 }
 
+// 特定のトークンが計算対象かどうかを判定する関数
+function isTokenIncludedInCalculation(
+  token: Input,
+  _index: number, // 将来の拡張のために残しておく
+  tokens: Input[],
+  onlyAfterYenMark: boolean,
+  onlyBeforeYen: boolean,
+): boolean {
+  // 数値以外は対象外
+  if (token.contentType !== "number") {
+    return false;
+  }
+
+  // フィルタリングされたトークンに含まれているかチェック
+  const filteredTokens = filterTokens(onlyAfterYenMark, onlyBeforeYen, tokens);
+
+  // 元のトークンと一致するものがフィルタリング結果に含まれているかチェック
+  return filteredTokens.some(
+    (filteredToken) =>
+      filteredToken.content === token.content &&
+      filteredToken.contentType === token.contentType,
+  );
+}
+
 function calculateTotal(
   onlyAfterYenMark: boolean,
   onlyBeforeYen: boolean,
@@ -55,4 +79,4 @@ function calculateTotal(
   }, 0);
 }
 
-export { calculateTotal };
+export { calculateTotal, isTokenIncludedInCalculation };
