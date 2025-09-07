@@ -28,15 +28,15 @@ jobs:
         id: git-check
         run: |
           git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
-          
+
       - name: Create Pull Request
         if: ${{ steps.git-check.outputs.changes == 'true' }}
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'Update npm dependencies'
-          title: '[Automated] Update npm dependencies'
-          body: 'Automated update of dependencies'
+          commit-message: "Update npm dependencies"
+          title: "[Automated] Update npm dependencies"
+          body: "Automated update of dependencies"
           branch: automated-npm-update
           add-paths: |
             package.json
