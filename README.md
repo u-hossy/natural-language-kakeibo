@@ -1,69 +1,56 @@
-# React + TypeScript + Vite
+# 自然言語内の数値計算ツール
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+自然言語中の数値を認識してくれる計算ツール
 
-Currently, two official plugins are available:
+![スクリーンショット](./docs/images/screenshot.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 開発者向け情報
 
-## Expanding the ESLint configuration
+IssueやPR等のコントリビューションは歓迎しています。なにかバグや不具合があればIssueにて報告していただけると幸いです。
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 技術スタック
 
-```js
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn-ui
+- ESLint / Prettier / TypeScript ESLint
+- Vitest（テスト）
+- pnpm（パッケージ管理）
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### コマンド集
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+#### 開発
+
+```sh
+# 開発サーバーの起動
+pnpm dev
+
+# 本番ビルド
+pnpm build
+
+# プレビュー
+pnpm preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+#### コード品質
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+```sh
+# Lint
+pnpm lint
 
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+# フォーマットチェック
+pnpm format --check
+
+# フォーマット実行
+pnpm format --write
+```
+
+#### テスト
+
+```sh
+# テスト実行
+pnpm test
+
 ```
