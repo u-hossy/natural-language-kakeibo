@@ -15,6 +15,8 @@ function App() {
   const [onlyAfterYenMark, setOnlyAfterYenMark] = useState<boolean>(false);
   const [onlyBeforeYen, setOnlyBeforeYen] = useState<boolean>(false);
 
+  const [calculateResult, setCalculateResult] = useState<string>("");
+
   const handleClear = () =>
     window.confirm("入力された内容がクリアされます。よろしいですか？") &&
     setUserInput("");
@@ -28,10 +30,22 @@ function App() {
     if (userInput.trim() !== "") {
       const t = tokenize(userInput);
       setFilterInput(t);
+      const total = calculateTotal(onlyAfterYenMark, onlyBeforeYen, t);
+      setCalculateResult(total.toLocaleString());
     } else {
       setFilterInput([]);
+      setCalculateResult("");
     }
-  }, [userInput]);
+  }, [userInput, onlyAfterYenMark, onlyBeforeYen]);
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(calculateResult);
+      console.log("結果をクリップボードにコピーしました");
+    } catch (error) {
+      console.error("クリップボードへのコピーに失敗しました:", error);
+    }
+  };
 
   return (
     <>
@@ -79,7 +93,7 @@ function App() {
 
         <div className="w-full max-w-3xl">
           <Label className="mb-2 font-semibold">解析結果:</Label>
-          <div className="mb-4 min-h-12 rounded-md border bg-gray-50 p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+          <div className="bg-accent mb-4 min-h-12 rounded-md border p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap">
             {filterInput.map((token, index) => {
               if (token.contentType === "LF") {
                 return "\n";
@@ -95,12 +109,13 @@ function App() {
                   onlyBeforeYen,
                 );
                 className = isIncluded
-                  ? "bg-green-200 text-green-800" // 計算対象
-                  : "bg-gray-200 text-gray-600"; // 計算対象外
+                  ? "bg-green-200 text-green-800 dark:bg-green-700 dark:text-green-100" // 計算対象
+                  : "bg-muted text-muted-foreground";
               } else if (token.contentType === "space") {
                 className = "";
               } else {
-                className = "bg-red-200 text-red-800";
+                className =
+                  "bg-red-200 text-red-800 dark:bg-red-700 dark:text-red-100";
               }
 
               return (
@@ -111,15 +126,9 @@ function App() {
             })}
           </div>
 
-          {/* 合計値表示 */}
-          <div className="rounded-md border bg-blue-50 p-4">
-            <Label className="text-lg font-semibold">
-              合計: ¥
-              {calculateTotal(
-                onlyAfterYenMark,
-                onlyBeforeYen,
-                filterInput,
-              ).toLocaleString()}
+          <div className="bg-secondary rounded-md border p-4">
+            <Label className="text-accent-foreground text-lg font-semibold">
+              合計: ¥{calculateResult}
             </Label>
           </div>
         </div>
@@ -127,6 +136,7 @@ function App() {
           <Button variant="outline" onClick={handleClear}>
             入力内容をクリア
           </Button>
+          <Button onClick={copyToClipboard}>結果をコピーする</Button>
         </div>
       </div>
     </>
