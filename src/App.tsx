@@ -7,6 +7,7 @@ import { Textarea } from "./components/ui/textarea";
 import type { Input } from "./types";
 import { tokenize } from "./lib/tokenize";
 import { calculateTotal, isTokenIncludedInCalculation } from "./lib/calculate";
+import Footer from "./components/footer";
 
 function App() {
   const [userInput, setUserInput] = useState<string>("");
@@ -16,6 +17,7 @@ function App() {
   const [onlyBeforeYen, setOnlyBeforeYen] = useState<boolean>(false);
 
   const [calculateResult, setCalculateResult] = useState<string>("");
+  const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const handleClear = () =>
     window.confirm("入力された内容がクリアされます。よろしいですか？") &&
@@ -39,12 +41,12 @@ function App() {
   }, [userInput, onlyAfterYenMark, onlyBeforeYen]);
 
   const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(calculateResult);
-      console.log("結果をクリップボードにコピーしました");
-    } catch (error) {
-      console.error("クリップボードへのコピーに失敗しました:", error);
-    }
+    await navigator.clipboard.writeText(calculateResult);
+    setIsCopied(true);
+
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000);
   };
 
   return (
@@ -92,7 +94,7 @@ function App() {
         </div>
 
         <div className="w-full max-w-3xl">
-          <Label className="mb-2 font-semibold">解析結果:</Label>
+          <Label className="mb-2 font-semibold">解析結果</Label>
           <div className="bg-accent mb-4 min-h-12 rounded-md border p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap">
             {filterInput.map((token, index) => {
               if (token.contentType === "LF") {
@@ -136,9 +138,15 @@ function App() {
           <Button variant="outline" onClick={handleClear}>
             入力内容をクリア
           </Button>
-          <Button onClick={copyToClipboard}>結果をコピーする</Button>
+          <Button
+            onClick={copyToClipboard}
+            disabled={!calculateResult || isCopied}
+          >
+            {isCopied ? "コピーしました！" : "結果をコピーする"}
+          </Button>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
