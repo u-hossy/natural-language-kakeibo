@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "@/components/header";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "./components/ui/label";
 import { Switch } from "./components/ui/switch";
@@ -8,6 +9,7 @@ import type { Input } from "./types";
 import { tokenize } from "./lib/tokenize";
 import { calculateTotal, isTokenIncludedInCalculation } from "./lib/calculate";
 import Footer from "./components/footer";
+import { Info } from "lucide-react";
 
 function App() {
   const [userInput, setUserInput] = useState<string>("");
@@ -53,6 +55,22 @@ function App() {
     <>
       <Header />
       <div className="mx-auto flex min-h-svh flex-col items-center justify-center p-4 md:w-3xl">
+        <div className="mb-12 flex w-full flex-col">
+          <Alert variant="default">
+            <Info />
+            <AlertTitle className="font-semibold">
+              このツールについて
+            </AlertTitle>
+
+            <AlertDescription className="my-2">
+              数字だけを抜き出してその合計を計算します。
+              <strong>
+                処理はすべてデバイス内で実行されるため、入力した情報がインターネットに送信されることはありません。
+              </strong>
+            </AlertDescription>
+          </Alert>
+        </div>
+
         <Label
           htmlFor="user_input"
           className="mb-2 items-start self-start font-semibold"
@@ -70,8 +88,8 @@ function App() {
           value={userInput}
         />
 
-        <div className="m-4 flex flex-col">
-          <div className="m-2 flex items-center space-x-2">
+        <div className="my-4 flex flex-col">
+          <div className="my-2 flex items-center space-x-2">
             <Switch
               id="only_after_yen_mark"
               checked={onlyAfterYenMark}
@@ -81,7 +99,7 @@ function App() {
               前に「¥」がついている数字だけを計算に含める
             </Label>
           </div>
-          <div className="m-2 flex items-center space-x-2">
+          <div className="my-2 flex items-center space-x-2">
             <Switch
               id="only_before_yen"
               checked={onlyBeforeYen}
@@ -129,9 +147,9 @@ function App() {
           </div>
 
           <div className="bg-secondary rounded-md border p-4">
-            <Label className="text-accent-foreground text-lg font-semibold">
+            <span className="text-accent-foreground text-lg font-semibold">
               合計: ¥{calculateResult}
-            </Label>
+            </span>
           </div>
         </div>
         <div className="m-8 flex flex-row gap-4">
