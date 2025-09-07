@@ -7,6 +7,14 @@ import { Textarea } from "./components/ui/textarea";
 function App() {
   const [userInput, setUserInput] = useState<string>("");
 
+  const handleClear = () =>
+    window.confirm("入力された内容がクリアされます。よろしいですか？") &&
+    setUserInput("");
+  const handleCalculate = () => {
+    // あとで消す
+    console.log(userInput);
+  };
+
   return (
     <>
       <Header />
@@ -27,10 +35,12 @@ function App() {
           value={userInput}
         />
         <div className="m-4 flex flex-row gap-4">
-          <Button className="w-20" variant="outline">
+          <Button className="w-20" variant="outline" onClick={handleClear}>
             クリア
           </Button>
-          <Button className="w-20">計算</Button>
+          <Button className="w-20" onClick={handleCalculate}>
+            計算
+          </Button>
         </div>
 
         <p>{userInput}</p>
