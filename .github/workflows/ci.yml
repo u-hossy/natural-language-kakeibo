@@ -3,9 +3,12 @@ name: ci
 on: push
 
 jobs:
-  Code-Quality:
+  Code-Check:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 1
+    concurrency:
+      group: ${{ github.workflow }}-{{ $github.ref }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
 
