@@ -9,6 +9,6 @@ jobs:
       pull-request: write
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    step:
+    steps:
       - uses: actions/checkout@v4
       - run: gh pr merge "${GITHUB_HEAD_REF}" --merge --auto
