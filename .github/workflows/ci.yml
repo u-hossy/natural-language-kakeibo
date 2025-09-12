@@ -3,7 +3,7 @@ name: CI
 on: push
 
 jobs:
-  Code-Check:
+  ci:
     runs-on: ubuntu-latest
     timeout-minutes: 1
     concurrency:
