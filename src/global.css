@@ -1,8 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* biome-ignore lint/suspicious/noUnknownAtRules: shadcn-ui default */
 @custom-variant dark (&:is(.dark *));
 
+/* biome-ignore lint/suspicious/noUnknownAtRules: shadcn-ui default */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -112,9 +114,11 @@
 
 @layer base {
   * {
+    /* biome-ignore lint/suspicious/noUnknownAtRules: shadcn-ui default */
     @apply border-border outline-ring/50;
   }
   body {
+    /* biome-ignore lint/suspicious/noUnknownAtRules: shadcn-ui default */
     @apply bg-background text-foreground;
   }
 }

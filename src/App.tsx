@@ -1,15 +1,15 @@
+import { Info } from "lucide-react";
 import { useEffect, useState } from "react";
 import Header from "@/components/header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import Footer from "./components/footer";
 import { Label } from "./components/ui/label";
 import { Switch } from "./components/ui/switch";
 import { Textarea } from "./components/ui/textarea";
-import type { Input } from "./types";
-import { tokenize } from "./lib/tokenize";
 import { calculateTotal, isTokenIncludedInCalculation } from "./lib/calculate";
-import Footer from "./components/footer";
-import { Info } from "lucide-react";
+import { tokenize } from "./lib/tokenize";
+import type { Input } from "./types";
 
 function App() {
   const [userInput, setUserInput] = useState<string>("");
@@ -113,7 +113,7 @@ function App() {
 
         <div className="w-full max-w-3xl">
           <Label className="mb-2 font-semibold">解析結果</Label>
-          <div className="bg-accent mb-4 min-h-12 rounded-md border p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+          <div className="mb-4 min-h-12 whitespace-pre-wrap rounded-md border bg-accent p-4 font-mono text-sm leading-relaxed">
             {filterInput.map((token, index) => {
               if (token.contentType === "LF") {
                 return "\n";
@@ -146,8 +146,8 @@ function App() {
             })}
           </div>
 
-          <div className="bg-secondary rounded-md border p-4">
-            <span className="text-accent-foreground text-lg font-semibold">
+          <div className="rounded-md border bg-secondary p-4">
+            <span className="font-semibold text-accent-foreground text-lg">
               合計: ¥{calculateResult}
             </span>
           </div>
