@@ -7,14 +7,14 @@ export default function Footer() {
       >
         GitHub
       </a>
-      <p className="text-muted-foreground mt-1 text-sm">
+      <p className="mt-1 text-muted-foreground text-sm">
         バグや不具合などの報告は
         <a href="https://github.com/u-hossy/natural-language-kakeibo//issues">
           GitHubのIssue
         </a>
         まで
       </p>
-      <p className="text-muted-foreground my-2">
+      <p className="my-2 text-muted-foreground">
         Made by <a href="https://github.com/u-hossy">u-hossy</a>
       </p>
     </footer>
