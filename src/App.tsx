@@ -67,8 +67,8 @@ function App() {
   return (
     <>
       <Header />
-      <div className="mx-auto flex min-h-svh flex-col items-center justify-center p-4 md:w-3xl">
-        <div className="mb-12 flex w-full flex-col">
+      <div className="mx-auto flex min-h-svh flex-col items-center px-4 md:w-3xl">
+        <div className="my-12 flex w-full flex-col">
           <Alert variant="default">
             <Info />
             <AlertTitle className="font-semibold">
