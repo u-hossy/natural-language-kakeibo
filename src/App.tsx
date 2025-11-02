@@ -31,6 +31,19 @@ function App() {
   };
 
   useEffect(() => {
+    if (userInput.trim() === "") return;
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  });
+
+  useEffect(() => {
     if (userInput.trim() !== "") {
       const t = tokenize(userInput);
       setFilterInput(t);
