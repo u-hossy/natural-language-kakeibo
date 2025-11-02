@@ -31,6 +31,19 @@ function App() {
   };
 
   useEffect(() => {
+    if (userInput.trim() === "") return;
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  });
+
+  useEffect(() => {
     if (userInput.trim() !== "") {
       const t = tokenize(userInput);
       setFilterInput(t);
@@ -54,8 +67,8 @@ function App() {
   return (
     <>
       <Header />
-      <div className="mx-auto flex min-h-svh flex-col items-center justify-center p-4 md:w-3xl">
-        <div className="mb-12 flex w-full flex-col">
+      <div className="mx-auto flex min-h-svh flex-col items-center px-4 md:w-3xl">
+        <div className="my-12 flex w-full flex-col">
           <Alert variant="default">
             <Info />
             <AlertTitle className="font-semibold">
