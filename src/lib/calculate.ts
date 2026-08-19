@@ -67,6 +67,66 @@ function isTokenIncludedInCalculation(
   );
 }
 
+// 「¥」マーク自体が計算対象の数字にかかっているかどうかを判定する関数
+function isYenMarkIncludedInCalculation(
+  index: number,
+  tokens: Input[],
+  onlyAfterYenMark: boolean,
+  onlyBeforeYen: boolean,
+): boolean {
+  if (!onlyAfterYenMark) {
+    return false;
+  }
+
+  for (let i = index + 1; i < tokens.length; i++) {
+    if (tokens[i].contentType === "space") {
+      continue;
+    }
+    if (tokens[i].contentType !== "number") {
+      return false;
+    }
+    return isTokenIncludedInCalculation(
+      tokens[i],
+      i,
+      tokens,
+      onlyAfterYenMark,
+      onlyBeforeYen,
+    );
+  }
+
+  return false;
+}
+
+// 「円」自体が計算対象の数字にかかっているかどうかを判定する関数
+function isYenIncludedInCalculation(
+  index: number,
+  tokens: Input[],
+  onlyAfterYenMark: boolean,
+  onlyBeforeYen: boolean,
+): boolean {
+  if (!onlyBeforeYen) {
+    return false;
+  }
+
+  for (let i = index - 1; i >= 0; i--) {
+    if (tokens[i].contentType === "space") {
+      continue;
+    }
+    if (tokens[i].contentType !== "number") {
+      return false;
+    }
+    return isTokenIncludedInCalculation(
+      tokens[i],
+      i,
+      tokens,
+      onlyAfterYenMark,
+      onlyBeforeYen,
+    );
+  }
+
+  return false;
+}
+
 function calculateTotal(
   onlyAfterYenMark: boolean,
   onlyBeforeYen: boolean,
@@ -79,4 +139,9 @@ function calculateTotal(
   }, 0);
 }
 
-export { calculateTotal, isTokenIncludedInCalculation };
+export {
+  calculateTotal,
+  isTokenIncludedInCalculation,
+  isYenMarkIncludedInCalculation,
+  isYenIncludedInCalculation,
+};
