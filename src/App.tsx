@@ -7,7 +7,12 @@ import Footer from "./components/footer";
 import { Label } from "./components/ui/label";
 import { Switch } from "./components/ui/switch";
 import { Textarea } from "./components/ui/textarea";
-import { calculateTotal, isTokenIncludedInCalculation } from "./lib/calculate";
+import {
+  calculateTotal,
+  isTokenIncludedInCalculation,
+  isYenIncludedInCalculation,
+  isYenMarkIncludedInCalculation,
+} from "./lib/calculate";
 import { tokenize } from "./lib/tokenize";
 import type { Input } from "./types";
 
@@ -146,6 +151,26 @@ function App() {
                   : "bg-muted text-muted-foreground";
               } else if (token.contentType === "space") {
                 className = "";
+              } else if (token.contentType === "YenMark") {
+                const isIncluded = isYenMarkIncludedInCalculation(
+                  index,
+                  filterInput,
+                  onlyAfterYenMark,
+                  onlyBeforeYen,
+                );
+                className = isIncluded
+                  ? "bg-green-200 text-green-800 dark:bg-green-700 dark:text-green-100" // 計算対象
+                  : "bg-red-200 text-red-800 dark:bg-red-700 dark:text-red-100";
+              } else if (token.contentType === "Yen") {
+                const isIncluded = isYenIncludedInCalculation(
+                  index,
+                  filterInput,
+                  onlyAfterYenMark,
+                  onlyBeforeYen,
+                );
+                className = isIncluded
+                  ? "bg-green-200 text-green-800 dark:bg-green-700 dark:text-green-100" // 計算対象
+                  : "bg-red-200 text-red-800 dark:bg-red-700 dark:text-red-100";
               } else {
                 className =
                   "bg-red-200 text-red-800 dark:bg-red-700 dark:text-red-100";
